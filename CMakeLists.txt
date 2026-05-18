@@ -2,9 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 project(QuantumReverb VERSION 1.0.0)
 
-# JUCE setup - user should set JUCE_DIR or have JUCE in path
-# Recommended: JUCE 7.0.0 or newer
-find_package(JUCE CONFIG REQUIRED)
+add_subdirectory(C:/JUCE juce)
 
 juce_add_plugin(QuantumReverb
     COMPANY_NAME "vibe-weaver"
@@ -13,7 +11,7 @@ juce_add_plugin(QuantumReverb
     PLUGIN_CODE "Qrev"
     FORMATS VST3 AU
     PRODUCT_NAME "Quantum Reverb"
-    DESCRIPTION "Premium aesthetic reverb with interactive visualizer"
+    DESCRIPTION "Premium oscillator-style reverb with interactive visualizer"
     IS_SYNTH FALSE
     NEEDS_MIDI_INPUT FALSE
     NEEDS_MIDI_OUTPUT FALSE
@@ -26,14 +24,16 @@ target_sources(QuantumReverb
     PRIVATE
         Source/PluginProcessor.cpp
         Source/PluginEditor.cpp
+        Source/ReverbEngine.cpp
 )
 
 target_compile_definitions(QuantumReverb
     PUBLIC
         JUCE_WEB_BROWSER=0
         JUCE_USE_CURL=0
-        JUCE_VST3_CAN_REPLACE_VST2=0
 )
+
+juce_generate_juce_header(QuantumReverb)
 
 target_link_libraries(QuantumReverb
     PRIVATE
