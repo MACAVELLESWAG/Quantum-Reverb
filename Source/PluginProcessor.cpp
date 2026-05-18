@@ -8,17 +8,17 @@ QuantumReverbAudioProcessor::QuantumReverbAudioProcessor()
                      .withOutput ("Output", juce::AudioChannelSet::stereo(), true)),
        apvts (*this, nullptr, "PARAMETERS", createParameterLayout())
 {
-    preDelaySmoothed.reset (100);
-    decaySmoothed.reset (100);
-    sizeSmoothed.reset (100);
-    dampingSmoothed.reset (100);
-    diffusionSmoothed.reset (100);
-    modDepthSmoothed.reset (100);
-    modRateSmoothed.reset (100);
-    mixSmoothed.reset (100);
-    lowCutSmoothed.reset (100);
-    highCutSmoothed.reset (100);
-    outputGainSmoothed.reset (100);
+    preDelaySmoothed.reset (80);
+    decaySmoothed.reset (80);
+    sizeSmoothed.reset (80);
+    dampingSmoothed.reset (80);
+    diffusionSmoothed.reset (80);
+    modDepthSmoothed.reset (80);
+    modRateSmoothed.reset (80);
+    mixSmoothed.reset (80);
+    lowCutSmoothed.reset (80);
+    highCutSmoothed.reset (80);
+    outputGainSmoothed.reset (80);
 }
 
 QuantumReverbAudioProcessor::~QuantumReverbAudioProcessor()
@@ -89,19 +89,19 @@ void QuantumReverbAudioProcessor::changeProgramName (int index, const juce::Stri
 void QuantumReverbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     reverbEngine.prepare (sampleRate, samplesPerBlock);
-    
+
     auto sr = sampleRate;
-    preDelaySmoothed.reset (sr, 0.05);
-    decaySmoothed.reset (sr, 0.1);
-    sizeSmoothed.reset (sr, 0.05);
-    dampingSmoothed.reset (sr, 0.05);
-    diffusionSmoothed.reset (sr, 0.05);
-    modDepthSmoothed.reset (sr, 0.05);
-    modRateSmoothed.reset (sr, 0.05);
-    mixSmoothed.reset (sr, 0.02);
-    lowCutSmoothed.reset (sr, 0.05);
-    highCutSmoothed.reset (sr, 0.05);
-    outputGainSmoothed.reset (sr, 0.02);
+    preDelaySmoothed.reset (sr, 0.04);
+    decaySmoothed.reset (sr, 0.08);
+    sizeSmoothed.reset (sr, 0.04);
+    dampingSmoothed.reset (sr, 0.04);
+    diffusionSmoothed.reset (sr, 0.04);
+    modDepthSmoothed.reset (sr, 0.04);
+    modRateSmoothed.reset (sr, 0.04);
+    mixSmoothed.reset (sr, 0.015);
+    lowCutSmoothed.reset (sr, 0.04);
+    highCutSmoothed.reset (sr, 0.04);
+    outputGainSmoothed.reset (sr, 0.015);
 }
 
 void QuantumReverbAudioProcessor::releaseResources()
@@ -152,7 +152,7 @@ void QuantumReverbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer
     reverbEngine.setMix (mixSmoothed.getNextValue());
     reverbEngine.setLowCutHz (lowCutSmoothed.getNextValue());
     reverbEngine.setHighCutHz (highCutSmoothed.getNextValue());
-    
+
     if (auto* p = apvts.getRawParameterValue("freeze"))
         reverbEngine.setFreeze (p->load() > 0.5f);
     if (auto* p = apvts.getRawParameterValue("shimmer"))
@@ -212,38 +212,38 @@ juce::AudioProcessorValueTreeState::ParameterLayout QuantumReverbAudioProcessor:
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
 
-    params.push_back (std::make_unique<juce::AudioParameterFloat> ("preDelay", "Pre Delay", 
-        juce::NormalisableRange<float> (0.0f, 200.0f, 0.1f), 25.0f, "ms"));
+    params.push_back (std::make_unique<juce::AudioParameterFloat> ("preDelay", "Pre Delay",
+        juce::NormalisableRange<float> (0.0f, 180.0f, 0.1f), 22.0f, "ms"));
 
-    params.push_back (std::make_unique<juce::AudioParameterFloat> ("decay", "Decay", 
-        juce::NormalisableRange<float> (0.3f, 25.0f, 0.01f, 0.4f), 4.5f, "s"));
+    params.push_back (std::make_unique<juce::AudioParameterFloat> ("decay", "Decay",
+        juce::NormalisableRange<float> (0.4f, 22.0f, 0.01f, 0.35f), 5.2f, "s"));
 
-    params.push_back (std::make_unique<juce::AudioParameterFloat> ("size", "Size", 
-        juce::NormalisableRange<float> (0.0f, 1.0f, 0.001f), 0.75f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat> ("size", "Size",
+        juce::NormalisableRange<float> (0.0f, 1.0f, 0.001f), 0.78f));
 
-    params.push_back (std::make_unique<juce::AudioParameterFloat> ("damping", "Damping", 
-        juce::NormalisableRange<float> (0.0f, 1.0f, 0.001f), 0.35f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat> ("damping", "Damping",
+        juce::NormalisableRange<float> (0.0f, 1.0f, 0.001f), 0.32f));
 
-    params.push_back (std::make_unique<juce::AudioParameterFloat> ("diffusion", "Diffusion", 
-        juce::NormalisableRange<float> (0.0f, 1.0f, 0.001f), 0.65f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat> ("diffusion", "Diffusion",
+        juce::NormalisableRange<float> (0.0f, 1.0f, 0.001f), 0.68f));
 
-    params.push_back (std::make_unique<juce::AudioParameterFloat> ("modDepth", "Mod Depth", 
-        juce::NormalisableRange<float> (0.0f, 1.0f, 0.001f), 0.22f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat> ("modDepth", "Mod Depth",
+        juce::NormalisableRange<float> (0.0f, 1.0f, 0.001f), 0.26f));
 
-    params.push_back (std::make_unique<juce::AudioParameterFloat> ("modRate", "Mod Rate", 
-        juce::NormalisableRange<float> (0.1f, 6.0f, 0.01f), 1.2f, "Hz"));
+    params.push_back (std::make_unique<juce::AudioParameterFloat> ("modRate", "Mod Rate",
+        juce::NormalisableRange<float> (0.1f, 5.5f, 0.01f), 1.35f, "Hz"));
 
-    params.push_back (std::make_unique<juce::AudioParameterFloat> ("mix", "Mix", 
-        juce::NormalisableRange<float> (0.0f, 1.0f, 0.001f), 0.55f));
+    params.push_back (std::make_unique<juce::AudioParameterFloat> ("mix", "Mix",
+        juce::NormalisableRange<float> (0.0f, 1.0f, 0.001f), 0.62f));
 
-    params.push_back (std::make_unique<juce::AudioParameterFloat> ("lowCut", "Low Cut", 
-        juce::NormalisableRange<float> (20.0f, 500.0f, 1.0f, 0.3f), 80.0f, "Hz"));
+    params.push_back (std::make_unique<juce::AudioParameterFloat> ("lowCut", "Low Cut",
+        juce::NormalisableRange<float> (20.0f, 450.0f, 1.0f, 0.3f), 65.0f, "Hz"));
 
-    params.push_back (std::make_unique<juce::AudioParameterFloat> ("highCut", "High Cut", 
-        juce::NormalisableRange<float> (2000.0f, 20000.0f, 1.0f, 0.3f), 8500.0f, "Hz"));
+    params.push_back (std::make_unique<juce::AudioParameterFloat> ("highCut", "High Cut",
+        juce::NormalisableRange<float> (2200.0f, 18000.0f, 1.0f, 0.3f), 7800.0f, "Hz"));
 
-    params.push_back (std::make_unique<juce::AudioParameterFloat> ("outputGain", "Output", 
-        juce::NormalisableRange<float> (-24.0f, 12.0f, 0.1f), 0.0f, "dB"));
+    params.push_back (std::make_unique<juce::AudioParameterFloat> ("outputGain", "Output",
+        juce::NormalisableRange<float> (-18.0f, 9.0f, 0.1f), 1.5f, "dB"));
 
     params.push_back (std::make_unique<juce::AudioParameterBool> ("freeze", "Freeze", false));
     params.push_back (std::make_unique<juce::AudioParameterBool> ("shimmer", "Shimmer", false));
